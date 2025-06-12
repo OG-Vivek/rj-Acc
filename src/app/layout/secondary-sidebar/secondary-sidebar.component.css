@@ -1,0 +1,8 @@
+:host {
+    display: block;
+    width: 150px;
+}
+
+.active-list-item {
+    background-color: rgba(0, 0, 0, 0.1);
+}

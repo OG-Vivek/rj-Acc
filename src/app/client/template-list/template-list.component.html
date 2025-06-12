@@ -1,0 +1,30 @@
+<p-card>
+    <ng-template pTemplate="header">
+        <div class="flex justify-content-between align-items-center p-4">
+            <h2 class="m-0">JL Templates</h2>
+            <p-button label="Add" icon="pi pi-plus"></p-button>
+        </div>
+    </ng-template>
+
+    <p-table [value]="templates" [tableStyle]="{'min-width': '50rem'}">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Preg</th>
+                <th>Actions</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-template>
+            <tr>
+                <td>{{template.name}}</td>
+                <td>{{template.type}}</td>
+                <td>{{template.preg}}</td>
+                <td>
+                    <p-button icon="pi pi-pencil" styleClass="p-button-text"></p-button>
+                    <p-button icon="pi pi-trash" styleClass="p-button-text p-button-danger"></p-button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-card>

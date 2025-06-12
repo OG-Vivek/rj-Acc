@@ -1,0 +1,15 @@
+<app-header></app-header>
+<mat-sidenav-container class="sidenav-container">
+    <mat-sidenav opened mode="side" class="main-sidenav">
+        <div class="sidebar-wrapper">
+            <app-sidebar></app-sidebar>
+            <app-secondary-sidebar></app-secondary-sidebar>
+        </div>
+    </mat-sidenav>
+    <mat-sidenav-content>
+        <main class="p-4">
+            <app-breadcrumb></app-breadcrumb>
+            <router-outlet></router-outlet>
+        </main>
+    </mat-sidenav-content>
+</mat-sidenav-container>

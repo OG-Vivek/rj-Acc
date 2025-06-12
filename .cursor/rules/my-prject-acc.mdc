@@ -6,7 +6,7 @@ alwaysApply: false
 
 Project Description
 
-This is a minimal website that uses PrimeNG for the UI.
+This is a minimal website that uses angular material for the UI.
 
 Layout Overview:
 

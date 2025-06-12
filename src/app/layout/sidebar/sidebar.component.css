@@ -1,0 +1,42 @@
+/* No custom styles needed for the sidebar component itself with this structure */
+
+.submenu {
+    overflow-y: hidden;
+    max-height: 0;
+    transition: max-height 0.2s ease-out;
+    padding-left: 24px;
+}
+
+.submenu.expanded {
+    max-height: 500px; /* Adjust if you have many sub-items */
+    transition: max-height 0.25s ease-in;
+}
+
+.expansion-indicator {
+    margin-left: auto;
+    transition: transform 0.2s ease-out;
+}
+
+.expansion-indicator.rotated {
+    transform: rotate(180deg);
+}
+
+a[mat-list-item] {
+    cursor: pointer;
+}
+
+.active-list-item {
+    background-color: #e8eaf6 !important; /* A light, purplish-blue */
+    color: #3f51b5 !important; /* The primary color for the text */
+}
+
+:host {
+    display: block;
+    width: 200px;
+    border-right: 1px solid rgba(0,0,0,0.12);
+}
+
+.mat-mdc-list-item.active-list-item {
+    color: var(--mat-primary-contrast-text-color, white) !important;
+    background: var(--mat-primary-main-color, #3f51b5) !important;
+}

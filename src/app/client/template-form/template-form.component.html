@@ -1,0 +1,69 @@
+<div class="form-container">
+    <div class="form-section">
+        <h2 class="page-title">New JL Template</h2>
+        <form [formGroup]="templateForm">
+            <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Name</mat-label>
+                <input matInput formControlName="name" placeholder="Enter name">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Description</mat-label>
+                <textarea matInput formControlName="description" placeholder="Enter description"></textarea>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Type</mat-label>
+                <mat-select formControlName="type">
+                    <mat-option *ngFor="let type of types" [value]="type.value">
+                        {{type.label}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-radio-group formControlName="preg" class="form-field radio-group">
+                <label class="radio-group-label">Preg</label>
+                <mat-radio-button value="yes" class="radio-option">
+                    <strong>Yes</strong> <br> <small>Preg is enabled</small>
+                </mat-radio-button>
+                <mat-radio-button value="no" class="radio-option">
+                    <strong>No</strong> <br> <small>Preg is disabled</small>
+                </mat-radio-button>
+            </mat-radio-group>
+        </form>
+    </div>
+
+    <div class="accounts-section">
+        <h2 class="page-title">JG Accounts</h2>
+        <mat-card class="accounts-card">
+            <div class="account-item">
+                <span>Account 1</span>
+                <span class="account-actions">
+                    <a class="action-link">Add</a> |
+                    <a class="action-link">Edit</a> |
+                    <a class="action-link">Delete</a>
+                </span>
+            </div>
+            <div class="account-item">
+                <span>Account 2</span>
+                <span class="account-actions">
+                    <a class="action-link">Add</a> |
+                    <a class="action-link">Edit</a> |
+                    <a class="action-link">Delete</a>
+                </span>
+            </div>
+            <div class="account-item">
+                <span>Account 3</span>
+                <span class="account-actions">
+                    <a class="action-link">Add</a> |
+                    <a class="action-link">Edit</a> |
+                    <a class="action-link">Delete</a>
+                </span>
+            </div>
+        </mat-card>
+        <div class="action-buttons">
+            <button mat-flat-button color="primary" (click)="saveAndClose()">Save and Close</button>
+            <button mat-stroked-button (click)="saveAndAddNew()">Save and Add New</button>
+        </div>
+    </div>
+</div>

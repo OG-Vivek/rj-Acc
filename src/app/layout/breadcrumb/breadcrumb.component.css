@@ -1,1 +1,4 @@
-
+:host ::ng-deep .p-breadcrumb .p-menuitem-separator {
+    margin: 0 0.5rem;
+    font-size: 1rem;
+}

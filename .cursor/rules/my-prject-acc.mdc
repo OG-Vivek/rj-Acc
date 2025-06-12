@@ -1,0 +1,71 @@
+---
+description: 
+globs: .html,.css,.ts
+alwaysApply: false
+---
+
+Project Description
+
+This is a minimal website that uses PrimeNG for the UI.
+
+Layout Overview:
+
+* Top Navigation Bar:
+
+  * A text-based logo is displayed on the left.
+  * A user icon is shown on the right.
+
+* Left Sidebar:
+
+  * Contains two dummy options and one "Client" option.
+  * Upon clicking "Client", a nested sidebar appears with the "Template" option.
+  * The current page path is displayed as breadcrumb navigation (e.g., `Client -> Template`) for better user awareness.
+
+* Main Section:
+
+  * Displays a list of "JL Templates".
+  * An "Add" button is placed next to the "JL Templates" title.
+  * Each template item includes two action buttons: Edit and Delete.
+
+Add Template Functionality
+
+When the "Add" button is clicked:
+
+* A form opens, divided into two sections:
+
+  * Left Section: A form to create a new JL Template.
+  * Right Section: A list of "JG Accounts" with an "Add" button to add a new JG Account.
+
+    * Each JG Account item includes Edit and Delete buttons.
+
+Template Form Fields:
+
+* Name (Text Input)
+* Type (Dropdown)
+* Preg (Radio Button with two options: Preg1 and Preg2)
+
+Template Form Buttons:
+
+* Save and Close: Saves the template and closes the form.
+* Save and Add New: Saves the template and resets the form for adding another.
+
+Add JL Account Flow
+
+To add a new JL Account, the template form must be completed first. Upon clicking the "Add JL Account" button:
+
+* A new tab opens, split vertically into two sections:
+
+  * Left Section: A form to add the JL Account.
+  * Right Section: Displays a PDF preview of the uploaded document.
+
+JL Account Form Fields:
+
+* JL Account Name (Auto-filled from the associated template)
+* COA (Dropdown)
+* Type (Radio Button)
+* Upload Document (PDF files only)
+
+JL Account Form Buttons:
+
+* Save and Close: Saves the JL Account and closes the form.
+* Save and Add New: Saves the JL Account and resets the form to add another.

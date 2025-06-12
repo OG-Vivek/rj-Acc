@@ -56,6 +56,10 @@ export class TemplateFormComponent implements OnInit {
       this.dataService.getTemplateById(this.templateId).subscribe(template => {
         if (template) {
           this.templateForm.patchValue(template);
+          this.dataService.resetGlAccounts();
+          template.glAccounts.forEach(glAccount => {
+            this.dataService.addGlAccount(glAccount);
+          });
         }
       });
     }
@@ -69,9 +73,11 @@ export class TemplateFormComponent implements OnInit {
       if (this.isEditMode && this.templateId) {
         this.dataService.updateTemplate({ id: this.templateId, ...this.templateForm.value, glAccounts: this.dataService.getGlAccounts() });
         this.dataService.resetGlAccounts();
+        this.dataService.templateValue = null;
       } else {
-        this.dataService.resetGlAccounts();
         this.dataService.addTemplate({ ...this.templateForm.value, glAccounts: this.dataService.getGlAccounts() });
+        this.dataService.resetGlAccounts();
+        this.dataService.templateValue = null;
       }
       this.router.navigate(['/client/template']);
     }
@@ -82,12 +88,14 @@ export class TemplateFormComponent implements OnInit {
       if (this.isEditMode && this.templateId) {
         this.dataService.updateTemplate({ id: this.templateId, ...this.templateForm.value, glAccounts: this.dataService.getGlAccounts() });
         this.dataService.resetGlAccounts();
+        this.dataService.templateValue = null;
         this.router.navigate(['/client/template/new']);
       } else {
-        this.dataService.resetGlAccounts();
         this.dataService.addTemplate({ ...this.templateForm.value, glAccounts: this.dataService.getGlAccounts() });
+        this.dataService.resetGlAccounts();
+        this.dataService.templateValue = null;
       }
-      this.templateForm.reset({ preg: 'yes' });
+      this.templateForm.reset();
     }
   }
 

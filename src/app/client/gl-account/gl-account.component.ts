@@ -124,7 +124,9 @@ export class GlAccountComponent {
         };
         this.dataService.addGlAccount(newGlAccount);
       }
-      this.router.navigate(['/client/template-list']);
+      this.glAccountForm.reset();
+      // this.pdfSrc = null;
+      // this.fileName = null;
     }
   }
 

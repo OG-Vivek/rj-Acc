@@ -9,8 +9,9 @@ import { MatSelectModule } from '@angular/material/select';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule, Location } from '@angular/common';
-import { Router } from '@angular/router';
-import { DataService } from '../../services/data.service';
+import { Router, ActivatedRoute } from '@angular/router';
+import { DataService, GlAccount } from '../../services/data.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-gl-account',
@@ -34,6 +35,8 @@ export class GlAccountComponent {
   glAccountForm: FormGroup;
   pdfSrc: any = null;
   fileName: string | null = null;
+  glId: string | null = null;
+  isEditMode = false;
 
   glAccounts = [
     { id: 1, name: 'Name 001' },
@@ -48,13 +51,36 @@ export class GlAccountComponent {
     { id: 10, name: 'Name 010' },
   ];
 
-  constructor(private fb: FormBuilder, private router: Router, private location: Location, private dataService: DataService) {
+  constructor(private fb: FormBuilder, private router: Router, private location: Location, private dataService: DataService, private route: ActivatedRoute) {
+    this.glId = this.route.snapshot.paramMap.get('glId');
     this.glAccountForm = this.fb.group({
       glAccount: ['', Validators.required],
       type: ['debit', Validators.required],
       offset: ['', Validators.required],
       document: [null],
       description: ['']
+    });
+    if (this.glId) {
+      this.isEditMode = true;
+      this.getGlAccount(parseInt(this.glId));
+    }
+  }
+
+  getGlAccount(id: number) {
+    this.dataService.getGlAccountById(id).subscribe(glAccount => {
+      if (glAccount) {
+        this.glAccountForm.patchValue(glAccount);
+
+        if (glAccount.document) {
+          this.fileName = 'document.pdf'; // Or a more descriptive name
+          const reader = new FileReader();
+          reader.onload = (e: any) => {
+            this.pdfSrc = new Uint8Array(e.target.result);
+          };
+          const blob = new Blob([glAccount.document]);
+          reader.readAsArrayBuffer(blob);
+        }
+      }
     });
   }
 
@@ -81,14 +107,24 @@ export class GlAccountComponent {
     document.getElementById('fileInput')?.click();
   }
 
-  onSubmitAndAddNew(): void {
+  onSubmitAndAddNew() {
     if (this.glAccountForm.valid) {
-      console.log('Form Submitted and Add New:', this.glAccountForm.value);
-      const glAccount = this.glAccountForm.getRawValue();
-      this.dataService.addGlAccount(glAccount);
-      this.glAccountForm.reset({ type: 'debit' });
-      this.pdfSrc = null;
-      this.fileName = null;
+      if (this.isEditMode && this.glId) {
+        const updatedGlAccount: GlAccount = {
+          ...this.glAccountForm.value,
+          id: parseInt(this.glId),
+          document: this.pdfSrc
+        };
+        this.dataService.updateGlAccount(updatedGlAccount);
+      } else {
+        const newGlAccount: GlAccount = {
+          ...this.glAccountForm.value,
+          id: Date.now(),
+          document: this.pdfSrc
+        };
+        this.dataService.addGlAccount(newGlAccount);
+      }
+      this.router.navigate(['/client/template-list']);
     }
   }
 
@@ -96,8 +132,8 @@ export class GlAccountComponent {
     if (this.glAccountForm.valid) {
       console.log('Form Submitted and Close:', this.glAccountForm.value);
       const glAccount = this.glAccountForm.getRawValue();
-      this.dataService.addGlAccount(glAccount);
-      this.router.navigate(['/client/template']);
+      this.dataService.addGlAccount({id: this.dataService.getGlAccounts().length + 1, ...glAccount});
+      this.location.back();
     }
   }
 

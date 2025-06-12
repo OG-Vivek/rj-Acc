@@ -7,8 +7,9 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
-import { Template, TemplateService } from '../template.service';
+import { Template } from '../../services/data.service';
 import { Observable } from 'rxjs';
+import { DataService } from '../../services/data.service';
 
 @Component({
   selector: 'app-template-list',
@@ -28,10 +29,10 @@ import { Observable } from 'rxjs';
 export class TemplateListComponent implements OnInit {
   templates$!: Observable<Template[]>;
 
-  constructor(public dialog: MatDialog, private templateService: TemplateService) {}
+  constructor(public dialog: MatDialog, private dataService: DataService) {}
 
   ngOnInit(): void {
-    this.templates$ = this.templateService.getTemplates();
+    this.templates$ = this.dataService.getTemplates();
   }
 
   deleteTemplate(id: string) {
@@ -44,7 +45,7 @@ export class TemplateListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.templateService.deleteTemplate(id);
+        this.dataService.deleteTemplate(id);
       }
     });
   }

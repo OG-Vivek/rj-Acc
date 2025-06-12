@@ -1,6 +1,6 @@
 <div class="template-list-container">
     <div class="page-header">
-        <h2 class="page-title">JL Templates</h2>
+        <h2 class="page-title">JE Templates</h2>
         <button mat-fab color="primary" routerLink="/client/template/new" aria-label="Add new template">
             <mat-icon>add</mat-icon>
         </button>
@@ -11,14 +11,14 @@
             <ng-template pTemplate="header">
                 <tr>
                     <th>Name</th>
-                    <th>Description</th>
+                    <th>Reference</th>
                     <th>Actions</th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-template>
                 <tr>
                     <td>{{template.name}}</td>
-                    <td>{{template.description}}</td>
+                    <td>{{template.reference}}</td>
                     <td>
                         <a class="action-link" [routerLink]="['/client/template/edit', template.id]">Edit</a>,
                         <a class="action-link" (click)="deleteTemplate(template.id)">Delete</a>

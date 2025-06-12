@@ -1,16 +1,18 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 
 export interface GlAccount {
     id: number;
     glAccount: string;
+    type: string;
     offset: string;
     description: string;
+    document?: any;
     documentURL: string;
 }
 
 export interface Template {
-    id: number;
+    id: string;
     name: string;
     reference: string;
     frequency: string;
@@ -23,15 +25,54 @@ export interface Template {
 })
 export class DataService {
 
-    private glAccounts: GlAccount[] = [];
-
-    private templates: Template[] = [
-        { id: 1, name: 'Template 1', reference: 'Reference 1', frequency: 'Frequency 1', type: 'Type 1', glAccounts: [] },
-        { id: 2, name: 'Template 2', reference: 'Reference 2', frequency: 'Frequency 2', type: 'Type 2', glAccounts: [] },
-        { id: 3, name: 'Template 3', reference: 'Reference 3', frequency: 'Frequency 3', type: 'Type 3', glAccounts: [] },
+    private glAccounts: GlAccount[] = [
+        { id: 1, glAccount: 'Name 001', type: 'debit', offset: '1000', description: 'Description 1', documentURL: 'https://www.google.com' },
+        { id: 2, glAccount: 'Name 002', type: 'credit', offset: '2000', description: 'Description 2', documentURL: 'https://www.google.com' },
     ];
 
+    private templates: Template[] = [
+        { id: '1', reference: 'Reference 1', name: 'Template A', type: 'A', frequency: 'monthly', glAccounts: [] },
+        { id: '2', reference: 'Reference 2', name: 'Template B', type: 'B', frequency: 'quarterly', glAccounts: [] },
+        { id: '3', reference: 'Reference 3', name: 'Template C', type: 'A', frequency: 'yearly', glAccounts: [] }
+    ];
+
+    private templates$ = new BehaviorSubject<Template[]>(this.templates);
+
+    getTemplates(): Observable<Template[]> {
+        return this.templates$.asObservable();
+    }
+
+    getTemplateById(id: string): Observable<Template | undefined> {
+        return of(this.templates.find(t => t.id === id));
+    }
+
+    addTemplate(template: Omit<Template, 'id'>) {
+        const newTemplate: Template = {
+            ...template,
+            id: Date.now().toString()
+        };
+        this.templates = [...this.templates, newTemplate];
+        this.templates$.next(this.templates);
+    }
+
+    updateTemplate(updatedTemplate: Template) {
+        const index = this.templates.findIndex(t => t.id === updatedTemplate.id);
+        if (index > -1) {
+            this.templates[index] = updatedTemplate;
+            this.templates$.next([...this.templates]);
+        }
+    }
+
+    deleteTemplate(id: string) {
+        this.templates = this.templates.filter(t => t.id !== id);
+        this.templates$.next(this.templates);
+    }
+
     constructor() { }
+
+    getGlAccountById(id: number): Observable<GlAccount | undefined> {
+        return of(this.glAccounts.find(g => g.id === id));
+    }
 
     getGlAccounts(): GlAccount[] {
         return this.glAccounts;
@@ -41,7 +82,14 @@ export class DataService {
         this.glAccounts.push(glAccount);
     }
 
-    getTemplates(): Template[] {
-        return this.templates;
+    updateGlAccount(updatedGlAccount: GlAccount) {
+        const index = this.glAccounts.findIndex(g => g.id === updatedGlAccount.id);
+        if (index > -1) {
+            this.glAccounts[index] = updatedGlAccount;
+        }
+    }
+
+    removeGlAccount(id: number) {
+        this.glAccounts = this.glAccounts.filter(g => g.id !== id);
     }
 }

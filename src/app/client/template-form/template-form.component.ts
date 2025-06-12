@@ -8,7 +8,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatRadioModule } from '@angular/material/radio';
-import { TemplateService } from '../template.service';
+import { DataService, GlAccount } from '../../services/data.service';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-template-form',
@@ -21,7 +22,8 @@ import { TemplateService } from '../template.service';
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
-    MatRadioModule
+    MatRadioModule,
+    MatIconModule
   ],
   templateUrl: './template-form.component.html',
   styleUrls: ['./template-form.component.css']
@@ -31,23 +33,19 @@ export class TemplateFormComponent implements OnInit {
   isEditMode = false;
   templateId: string | null = null;
   types: any[] = [{ label: 'Type A', value: 'A' }, { label: 'Type B', value: 'B' }];
-  jgAccounts = [
-    { id: '1', name: 'Account 1' },
-    { id: '2', name: 'Account 2' },
-    { id: '3', name: 'Account 3' },
-  ];
+  frequencies: any[] = [{ label: 'Monthly', value: 'monthly' }, { label: 'Quarterly', value: 'quarterly' }, { label: 'Yearly', value: 'yearly' }];
 
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private templateService: TemplateService
+    public dataService: DataService
   ) {
     this.templateForm = this.fb.group({
       name: ['', Validators.required],
-      type: [null, Validators.required],
-      preg: ['yes', Validators.required],
-      description: ['']
+      reference: ['', Validators.required],
+      frequency: [null, Validators.required],
+      type: [null, Validators.required]
     });
   }
 
@@ -55,7 +53,7 @@ export class TemplateFormComponent implements OnInit {
     this.templateId = this.route.snapshot.paramMap.get('id');
     if (this.templateId) {
       this.isEditMode = true;
-      this.templateService.getTemplateById(this.templateId).subscribe(template => {
+      this.dataService.getTemplateById(this.templateId).subscribe(template => {
         if (template) {
           this.templateForm.patchValue(template);
         }
@@ -66,9 +64,9 @@ export class TemplateFormComponent implements OnInit {
   saveAndClose() {
     if (this.templateForm.valid) {
       if (this.isEditMode && this.templateId) {
-        this.templateService.updateTemplate({ id: this.templateId, ...this.templateForm.value });
+        this.dataService.updateTemplate({ id: this.templateId, ...this.templateForm.value, glAccounts: this.dataService.getGlAccounts() });
       } else {
-        this.templateService.addTemplate(this.templateForm.value);
+        this.dataService.addTemplate({ ...this.templateForm.value, glAccounts: this.dataService.getGlAccounts() });
       }
       this.router.navigate(['/client/template']);
     }
@@ -77,12 +75,32 @@ export class TemplateFormComponent implements OnInit {
   saveAndAddNew() {
     if (this.templateForm.valid) {
       if (this.isEditMode && this.templateId) {
-        this.templateService.updateTemplate({ id: this.templateId, ...this.templateForm.value });
+        this.dataService.updateTemplate({ id: this.templateId, ...this.templateForm.value });
         this.router.navigate(['/client/template/new']);
       } else {
-        this.templateService.addTemplate(this.templateForm.value);
+        this.dataService.addTemplate(this.templateForm.value);
       }
       this.templateForm.reset({ preg: 'yes' });
     }
+  }
+
+  addGlAccount() {
+    if (this.isEditMode && this.templateId) {
+      this.router.navigate([`/client/template/edit/${this.templateId}/gl-accounts/create`]);
+    } else {
+      this.router.navigate(['/client/template/new/gl-accounts/create']);
+    }
+  }
+
+  editGlAccount(glAccount: GlAccount) {
+    if (this.isEditMode && this.templateId) {
+      this.router.navigate([`/client/template/edit/${this.templateId}/gl-accounts/edit/${glAccount.id}`]);
+    } else {
+      this.router.navigate([`/client/template/new/gl-accounts/edit/${glAccount.id}`]);
+    }
+  }
+
+  removeGlAccount(id: number) {
+    this.dataService.removeGlAccount(id);
   }
 }

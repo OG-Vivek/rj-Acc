@@ -18,17 +18,45 @@ export const routes: Routes = [
                         path: '',
                         component: TemplateListComponent
                     },
-                    { path: 'new', component: TemplateFormComponent, data: { breadcrumb: 'New' } },
-                    { path: 'edit/:id', component: TemplateFormComponent, data: { breadcrumb: 'Edit' } },   
-                    {
-                        path: ':id/gl-accounts/create',
-                        data: { breadcrumb: 'Create GL Account' },
-                        component: GlAccountComponent
+                    { 
+                        path: 'new',
+                        data: { breadcrumb: 'New' },
+                        children: [
+                            {
+                                path: '',
+                                component: TemplateFormComponent
+                            },
+                            {
+                                path: 'gl-accounts/create',
+                                data: { breadcrumb: 'Create GL Account' },
+                                component: GlAccountComponent
+                            },
+                            {
+                                path: 'gl-accounts/edit/:glId',
+                                data: { breadcrumb: 'Edit GL Account' },
+                                component: GlAccountComponent
+                            }
+                        ]
                     },
                     {
-                        path: ':id/gl-accounts/edit/:glId',
-                        data: { breadcrumb: 'Edit GL Account' },
-                        component: GlAccountComponent
+                        path: 'edit/:id',
+                        data: { breadcrumb: 'Edit' },
+                        children: [
+                            {
+                                path: '',
+                                component: TemplateFormComponent
+                            },
+                            {
+                                path: 'gl-accounts/create',
+                                data: { breadcrumb: 'Create GL Account' },
+                                component: GlAccountComponent
+                            },
+                            {
+                                path: 'gl-accounts/edit/:glId',
+                                data: { breadcrumb: 'Edit GL Account' },
+                                component: GlAccountComponent
+                            }
+                        ]
                     }
                 ]
             }

@@ -12,7 +12,7 @@
           <mat-form-field appearance="outline">
             <mat-label>GL Account</mat-label>
             <mat-select formControlName="glAccount">
-              <mat-option *ngFor="let account of glAccounts" [value]="account.id">
+              <mat-option *ngFor="let account of glAccounts" [value]="account.name">
                 {{account.name}}
               </mat-option>
             </mat-select>
@@ -27,7 +27,7 @@
           <mat-form-field appearance="outline">
             <mat-label>Offset</mat-label>
             <mat-select formControlName="offset">
-              <mat-option *ngFor="let offset of glAccounts" [value]="offset.id">
+              <mat-option *ngFor="let offset of glAccounts" [value]="offset.name">
                 {{offset.name}}
               </mat-option>
             </mat-select>

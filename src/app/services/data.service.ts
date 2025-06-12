@@ -25,10 +25,7 @@ export interface Template {
 })
 export class DataService {
 
-    private glAccounts: GlAccount[] = [
-        { id: 1, glAccount: 'Name 001', type: 'debit', offset: '1000', description: 'Description 1', documentURL: 'https://www.google.com' },
-        { id: 2, glAccount: 'Name 002', type: 'credit', offset: '2000', description: 'Description 2', documentURL: 'https://www.google.com' },
-    ];
+    private glAccounts: GlAccount[] = [];
 
     private templates: Template[] = [
         { id: '1', reference: 'Reference 1', name: 'Template A', type: 'A', frequency: 'monthly', glAccounts: [] },
@@ -37,6 +34,8 @@ export class DataService {
     ];
 
     private templates$ = new BehaviorSubject<Template[]>(this.templates);
+
+    public templateValue: any | null = null;
 
     getTemplates(): Observable<Template[]> {
         return this.templates$.asObservable();
@@ -76,6 +75,10 @@ export class DataService {
 
     getGlAccounts(): GlAccount[] {
         return this.glAccounts;
+    }
+
+    resetGlAccounts() {
+        this.glAccounts = [];
     }
 
     addGlAccount(glAccount: GlAccount) {

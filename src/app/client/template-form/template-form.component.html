@@ -49,10 +49,13 @@
                     <a class="action-link" (click)="removeGlAccount(glAccount.id)">Delete</a>
                 </span>
             </div>
+            <div *ngIf="!this.dataService.getGlAccounts().length" class="account-item">
+                <span>No GL accounts added yet</span>
+            </div>
         </mat-card>
         <div class="action-buttons">
-            <button mat-raised-button color="primary" (click)="saveAndAddNew()" [disabled]="templateForm.invalid">Submit & Add New</button>
-            <button mat-raised-button (click)="saveAndClose()" [disabled]="templateForm.invalid">Submit & Close</button>
+            <button mat-raised-button color="primary" (click)="saveAndAddNew()" [disabled]="templateForm.invalid || !this.dataService.getGlAccounts().length">Submit & Add New</button>
+            <button mat-raised-button (click)="saveAndClose()" [disabled]="templateForm.invalid || !this.dataService.getGlAccounts().length">Submit & Close</button>
         </div>
     </div>
 </div>

@@ -32,7 +32,7 @@ export class TemplateFormComponent implements OnInit {
   templateForm: FormGroup;
   isEditMode = false;
   templateId: string | null = null;
-  types: any[] = [{ label: 'Type A', value: 'A' }, { label: 'Type B', value: 'B' }];
+  types: any[] = [{ label: 'Sales', value: 'sales' }, { label: 'Payroll', value: 'payroll' }, { label: 'Bank', value: 'bank' }, { label: 'CC', value: 'cc' }, { label: 'Custom', value: 'custom' }];
   frequencies: any[] = [{ label: 'Monthly', value: 'monthly' }, { label: 'Quarterly', value: 'quarterly' }, { label: 'Yearly', value: 'yearly' }];
 
   constructor(
@@ -59,13 +59,18 @@ export class TemplateFormComponent implements OnInit {
         }
       });
     }
+    if (this.dataService.templateValue) {
+      this.templateForm.patchValue(this.dataService.templateValue);
+    }
   }
 
   saveAndClose() {
     if (this.templateForm.valid) {
       if (this.isEditMode && this.templateId) {
         this.dataService.updateTemplate({ id: this.templateId, ...this.templateForm.value, glAccounts: this.dataService.getGlAccounts() });
+        this.dataService.resetGlAccounts();
       } else {
+        this.dataService.resetGlAccounts();
         this.dataService.addTemplate({ ...this.templateForm.value, glAccounts: this.dataService.getGlAccounts() });
       }
       this.router.navigate(['/client/template']);
@@ -75,16 +80,19 @@ export class TemplateFormComponent implements OnInit {
   saveAndAddNew() {
     if (this.templateForm.valid) {
       if (this.isEditMode && this.templateId) {
-        this.dataService.updateTemplate({ id: this.templateId, ...this.templateForm.value });
+        this.dataService.updateTemplate({ id: this.templateId, ...this.templateForm.value, glAccounts: this.dataService.getGlAccounts() });
+        this.dataService.resetGlAccounts();
         this.router.navigate(['/client/template/new']);
       } else {
-        this.dataService.addTemplate(this.templateForm.value);
+        this.dataService.resetGlAccounts();
+        this.dataService.addTemplate({ ...this.templateForm.value, glAccounts: this.dataService.getGlAccounts() });
       }
       this.templateForm.reset({ preg: 'yes' });
     }
   }
 
   addGlAccount() {
+    this.dataService.templateValue = this.templateForm.getRawValue();
     if (this.isEditMode && this.templateId) {
       this.router.navigate([`/client/template/edit/${this.templateId}/gl-accounts/create`]);
     } else {
@@ -93,6 +101,7 @@ export class TemplateFormComponent implements OnInit {
   }
 
   editGlAccount(glAccount: GlAccount) {
+    this.dataService.templateValue = this.templateForm.getRawValue();
     if (this.isEditMode && this.templateId) {
       this.router.navigate([`/client/template/edit/${this.templateId}/gl-accounts/edit/${glAccount.id}`]);
     } else {

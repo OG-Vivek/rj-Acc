@@ -3,7 +3,7 @@
     <button mat-icon-button (click)="goBack()" aria-label="Go back button">
       <mat-icon>arrow_back</mat-icon>
     </button>
-    <h1 class="page-title">JE NAME</h1>
+    <h1 class="page-title">{{dataService.templateValue?.name || 'JE NAME'}}</h1>
   </div>
   <div class="container mt-3" [formGroup]="glAccountForm">
     <div class="left-pane">

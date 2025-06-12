@@ -51,7 +51,7 @@ export class GlAccountComponent {
     { id: 10, name: 'Name 010' },
   ];
 
-  constructor(private fb: FormBuilder, private router: Router, private location: Location, private dataService: DataService, private route: ActivatedRoute) {
+  constructor(private fb: FormBuilder, private router: Router, private location: Location, public dataService: DataService, private route: ActivatedRoute) {
     this.glId = this.route.snapshot.paramMap.get('glId');
     this.glAccountForm = this.fb.group({
       glAccount: ['', Validators.required],

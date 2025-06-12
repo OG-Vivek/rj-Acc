@@ -9,7 +9,6 @@ export interface GlAccount {
     description: string;
     document?: any;
     documentName?: string;
-    documentURL: string;
 }
 
 export interface Template {
@@ -29,9 +28,9 @@ export class DataService {
     private glAccounts: GlAccount[] = [];
 
     private templates: Template[] = [
-        { id: '1', reference: 'Reference 1', name: 'Template A', type: 'A', frequency: 'monthly', glAccounts: [] },
-        { id: '2', reference: 'Reference 2', name: 'Template B', type: 'B', frequency: 'quarterly', glAccounts: [] },
-        { id: '3', reference: 'Reference 3', name: 'Template C', type: 'A', frequency: 'yearly', glAccounts: [] }
+        { id: '1', reference: 'Reference 1', name: 'Template A', type: 'sales', frequency: 'monthly', glAccounts: [] },
+        { id: '2', reference: 'Reference 2', name: 'B', type: 'cc', frequency: 'quarterly', glAccounts: [] },
+        { id: '3', reference: 'Reference 3', name: 'C', type: 'payroll', frequency: 'yearly', glAccounts: [] }
     ];
 
     private templates$ = new BehaviorSubject<Template[]>(this.templates);

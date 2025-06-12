@@ -24,7 +24,7 @@ export class BreadcrumbComponent implements OnInit {
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(() => {
-        this.items = this.createBreadcrumbs(this.activatedRoute.root);
+        this.items = [this.home, ...this.createBreadcrumbs(this.activatedRoute.root)];
       });
   }
 
@@ -34,7 +34,7 @@ export class BreadcrumbComponent implements OnInit {
     if (children.length === 0) {
       return breadcrumbs;
     }
-
+    console.log(children);
     for (const child of children) {
       if (child.outlet !== 'primary') {
         continue;
@@ -54,10 +54,12 @@ export class BreadcrumbComponent implements OnInit {
 
       const id = child.snapshot.paramMap.get('id');
       if (id) {
-        breadcrumbs.push({
-          label: id,
-          routerLink: nextUrl
-        });
+        if (!breadcrumbs.find(b => b.label === id)) {
+          breadcrumbs.push({
+            label: id,
+            routerLink: nextUrl
+          });
+        }
       }
       
       return this.createBreadcrumbs(child, nextUrl, breadcrumbs);

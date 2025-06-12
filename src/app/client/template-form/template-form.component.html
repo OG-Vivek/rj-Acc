@@ -45,8 +45,12 @@
             <div class="account-item" *ngFor="let glAccount of this.dataService.getGlAccounts()">
                 <span>{{glAccount.glAccount}}</span>
                 <span class="account-actions">
-                    <a class="action-link" (click)="editGlAccount(glAccount)">Edit</a> |
-                    <a class="action-link" (click)="removeGlAccount(glAccount.id)">Delete</a>
+                    <a class="action-link" (click)="editGlAccount(glAccount)" style="margin-right: 8px;">
+                        <mat-icon>edit</mat-icon>
+                    </a>
+                    <a class="action-link" (click)="removeGlAccount(glAccount.id)">
+                        <mat-icon>delete</mat-icon>
+                    </a>
                 </span>
             </div>
             <div *ngIf="!this.dataService.getGlAccounts().length" class="account-item">

@@ -1,1 +1,19 @@
 /* You can add global styles to this file, and also import other style files */
+body{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+@use '@angular/material' as mat;
+
+html {
+  @include mat.theme((
+    color: (
+      primary: red,
+      tertiary: back,
+      theme-type: green,
+    ),
+    typography: Roboto,
+    density: 0
+  ));
+}

@@ -15,16 +15,6 @@ import { NavItem } from '../nav-item.model';
 export class SidebarComponent {
   menuItems: NavItem[] = [
     {
-      label: 'Dummy 1',
-      icon: 'note',
-      route: '#'
-    },
-    {
-      label: 'Dummy 2',
-      icon: 'note',
-      route: '#'
-    },
-    {
       label: 'Client',
       icon: 'group',
       route: '/client/template'

@@ -20,8 +20,12 @@
                     <td>{{template.name}}</td>
                     <td>{{template.reference}}</td>
                     <td>
-                        <a class="action-link" [routerLink]="['/client/template/edit', template.id]">Edit</a>,
-                        <a class="action-link" (click)="deleteTemplate(template.id)">Delete</a>
+                        <a class="action-link" [routerLink]="['/client/template/edit', template.id]" style="margin-right: 8px;">
+                            <mat-icon>edit</mat-icon>
+                        </a>
+                        <a class="action-link" (click)="deleteTemplate(template.id)">
+                            <mat-icon>delete</mat-icon>
+                        </a>
                     </td>
                 </tr>
             </ng-template>

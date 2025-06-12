@@ -38,5 +38,5 @@ a[mat-list-item] {
 
 .mat-mdc-list-item.active-list-item {
     color: var(--mat-primary-contrast-text-color, white) !important;
-    background: var(--mat-primary-main-color, #3f51b5) !important;
+    background: var(--mat-primary-main-color, #f0f4f8) !important;
 }

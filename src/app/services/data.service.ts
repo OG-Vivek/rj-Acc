@@ -8,6 +8,7 @@ export interface GlAccount {
     offset: string;
     description: string;
     document?: any;
+    documentName?: string;
     documentURL: string;
 }
 

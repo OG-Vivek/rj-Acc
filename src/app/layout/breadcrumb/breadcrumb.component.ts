@@ -34,7 +34,6 @@ export class BreadcrumbComponent implements OnInit {
     if (children.length === 0) {
       return breadcrumbs;
     }
-    console.log(children);
     for (const child of children) {
       if (child.outlet !== 'primary') {
         continue;

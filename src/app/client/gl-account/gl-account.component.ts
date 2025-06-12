@@ -72,13 +72,8 @@ export class GlAccountComponent {
         this.glAccountForm.patchValue(glAccount);
 
         if (glAccount.document) {
-          this.fileName = 'document.pdf'; // Or a more descriptive name
-          const reader = new FileReader();
-          reader.onload = (e: any) => {
-            this.pdfSrc = new Uint8Array(e.target.result);
-          };
-          const blob = new Blob([glAccount.document]);
-          reader.readAsArrayBuffer(blob);
+          this.fileName = glAccount.documentName || 'document.pdf';
+          this.pdfSrc = glAccount.document;
         }
       }
     });
@@ -91,9 +86,12 @@ export class GlAccountComponent {
       if (file.type === 'application/pdf') {
         this.fileName = file.name;
         const reader = new FileReader();
-        reader.onload = (e: any) => { this.pdfSrc = new Uint8Array(e.target.result); };
-        reader.readAsArrayBuffer(file);
-        this.glAccountForm.patchValue({ document: file });
+        reader.onload = (e: any) => { 
+          this.pdfSrc = e.target.result; 
+          this.glAccountForm.patchValue({ document: this.pdfSrc });
+          this.glAccountForm.patchValue({ documentName: file.name });
+        };
+        reader.readAsDataURL(file);
       } else {
         // Handle non-pdf file error
         this.fileName = null;
@@ -113,28 +111,44 @@ export class GlAccountComponent {
         const updatedGlAccount: GlAccount = {
           ...this.glAccountForm.value,
           id: parseInt(this.glId),
-          document: this.pdfSrc
+          document: this.pdfSrc,
+          documentName: this.fileName || undefined
         };
         this.dataService.updateGlAccount(updatedGlAccount);
       } else {
         const newGlAccount: GlAccount = {
           ...this.glAccountForm.value,
           id: Date.now(),
-          document: this.pdfSrc
+          document: this.pdfSrc,
+          documentName: this.fileName || undefined
         };
         this.dataService.addGlAccount(newGlAccount);
       }
-      this.glAccountForm.reset();
-      // this.pdfSrc = null;
-      // this.fileName = null;
+      this.glAccountForm.reset({type: 'debit'});
+      this.pdfSrc = null;
+      this.fileName = null;
     }
   }
 
   onSubmitAndClose(): void {
     if (this.glAccountForm.valid) {
-      console.log('Form Submitted and Close:', this.glAccountForm.value);
-      const glAccount = this.glAccountForm.getRawValue();
-      this.dataService.addGlAccount({id: this.dataService.getGlAccounts().length + 1, ...glAccount});
+      if (this.isEditMode && this.glId) {
+        const updatedGlAccount: GlAccount = {
+          ...this.glAccountForm.value,
+          id: parseInt(this.glId),
+          document: this.pdfSrc,
+          documentName: this.fileName || undefined
+        };
+        this.dataService.updateGlAccount(updatedGlAccount);
+      } else {
+        const newGlAccount: GlAccount = {
+          ...this.glAccountForm.value,
+          id: Date.now(),
+          document: this.pdfSrc,
+          documentName: this.fileName || undefined
+        };
+        this.dataService.addGlAccount(newGlAccount);
+      }
       this.location.back();
     }
   }

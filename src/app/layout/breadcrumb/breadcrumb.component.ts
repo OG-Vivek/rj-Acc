@@ -14,17 +14,14 @@ import { filter } from 'rxjs/operators';
 })
 export class BreadcrumbComponent implements OnInit {
   items: MenuItem[] = [];
-  home: MenuItem;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute) {
-    this.home = { icon: 'pi pi-home', routerLink: '/' };
-  }
+  constructor(private router: Router, private activatedRoute: ActivatedRoute) {}
 
   ngOnInit() {
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(() => {
-        this.items = [this.home, ...this.createBreadcrumbs(this.activatedRoute.root)];
+        this.items = [...this.createBreadcrumbs(this.activatedRoute.root)];
       });
   }
 
@@ -34,7 +31,7 @@ export class BreadcrumbComponent implements OnInit {
     if (children.length === 0) {
       return breadcrumbs;
     }
-    console.log(children);
+
     for (const child of children) {
       if (child.outlet !== 'primary') {
         continue;
